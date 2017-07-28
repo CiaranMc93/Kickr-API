@@ -22,15 +22,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/cmcmanus/.m2/repository/org/jboss/remoting3/jboss-remoting/3.2.14.GA/jboss-remoting-3.2.14.GA.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="org.eclipse.jst.component.archivename" value="jboss-remoting-3.2.14.GA.jar"/>
-			<attribute name="maven.groupId" value="org.jboss.remoting3"/>
-			<attribute name="maven.artifactId" value="jboss-remoting"/>
-			<attribute name="maven.version" value="3.2.14.GA"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

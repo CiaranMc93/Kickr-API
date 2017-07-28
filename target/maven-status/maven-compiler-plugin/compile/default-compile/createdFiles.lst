@@ -1,5 +1,6 @@
-Spring\Error.class
 Spring\Application.class
+Spring\Error.class
+Spring\FixtureList.class
 Spring\Greeting.class
 Spring\User.class
 Spring\GreetingController.class
