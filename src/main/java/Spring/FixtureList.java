@@ -51,7 +51,8 @@ public class FixtureList {
 			 
 			 for (Element trElem : trCompetition) 
 			 {
-				 	System.out.println(trElem.childNodes().toString());
+				 	
+				 	System.out.println("Size: " + trElem.child(0).html().toString());
 			 }
 			 
 			 for (Element trElem : trDate) 

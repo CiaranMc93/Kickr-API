@@ -20,13 +20,22 @@ public class GreetingController {
                             String.format(template, name));
     }
     
-    @RequestMapping(value = "/post", method = RequestMethod.POST)
-    public User createUser(@RequestBody User user)
+    //login url method to take in the api request
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public void loginOrCreate(@RequestBody User user)
     {
-    	 System.out.println("");
-    	
-    	 //return to show user
-    	 return new User(user.getName().toString(),user.getUser().toString());
+    	if(user.login())
+    	{
+    		//successful login
+    	}
+    	else
+    	{
+    		//signup
+    		if(user.signUp())
+    		{
+    			//successful signup
+    		}
+    	}
     }
     
     //map the root to an error page
