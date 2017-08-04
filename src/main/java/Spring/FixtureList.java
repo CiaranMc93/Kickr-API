@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class FixtureList {
 
     @RequestMapping(value = "/fixtures/{county}")
-    public void fixtures(@PathVariable("county") String county) 
+    public ArrayList<Matches> fixtures(@PathVariable("county") String county) 
     {
 		String URL = "";
 		
@@ -29,16 +29,8 @@ public class FixtureList {
 		{
 			//define our lists
 			ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
-			ArrayList<JSONObject> competition = new ArrayList<JSONObject>();
-			ArrayList<JSONObject> date = new ArrayList<JSONObject>();
-			ArrayList<JSONObject> matchAll = new ArrayList<JSONObject>();
 			
 			JSONObject match = null;
-			JSONObject comp = null;
-			JSONObject dates = null;
-			JSONObject matchInfo = null;
-			JSONObject matchOvr = new JSONObject();
-			
 			
 			URL = "http://www.laoisgaa.ie/upcomingFixtures/";
 			
@@ -46,60 +38,64 @@ public class FixtureList {
 			{
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
-				
-				 //extract the information via the element names
-				 Elements trMatch = doc.getElementsByClass("item odd");
-				 Elements trCompetition = doc.getElementsByClass("competition");
-				 Elements trDate = doc.getElementsByClass("date");
 				 
-				 //for each match in the webpage
-				 for (Element trElem : trMatch) 
+				 Element tableBody = doc.getElementsByClass("frData upcoming_fixtures").get(0);
+				 //get all rows from the table
+				 Elements rows = tableBody.select("tr");
+				 
+				 //we need temp variables for date and competition
+				 String tempComp = "";
+				 String tempDate = "";
+				 
+				 for(Element fixtures : rows)
 				 {
-					 match = new JSONObject();
-					 
-					 match.put("Time", trElem.child(0).html().toString());
-					 match.put("Home", trElem.child(1).html().toString());
-					 match.put("Away", trElem.child(3).html().toString());
-					 match.put("Venue", trElem.child(4).html().toString());
-
-					 //add to list
-					 matches.add(match);
+					 //competition denotes a new section
+					 if(fixtures.toString().contains("competition"))
+					 {
+						 tempComp = fixtures.child(0).html().toString();
+					 }
+					 else if(fixtures.toString().contains("date"))
+					 {
+						 tempDate = fixtures.child(0).html().toString();
+					 }
+					 else if(fixtures.toString().contains("item odd") || fixtures.toString().contains("item even"))
+					 {
+						 match = new JSONObject();
+						 
+						 match.put("Time", fixtures.child(0).html().toString());
+						 match.put("Home", fixtures.child(1).html().toString());
+						 match.put("Away", fixtures.child(3).html().toString());
+						 match.put("Venue", fixtures.child(4).html().toString());
+						 match.put("Date", tempDate);
+						 match.put("Competition", tempComp);
+						 
+						 //add to list
+						 matches.add(match);
+						 
+					 }
 				 }
 				 
-				 //for each competition in the webpage
-				 for (Element trElem : trCompetition) 
-				 {
-					 comp = new JSONObject();
-					 
-					 comp.put("Competition",trElem.child(0).html().toString());
-					 competition.add(comp);
-				 }
-				 
-				 //for each date in the webpage
-				 for (Element trElem : trDate) 
-				 {
-					 dates = new JSONObject();
-					 
-					 dates.put("Date",trElem.child(0).html().toString());
-					 date.add(dates);
-				 }
+				 //array of matches objects
+				 ArrayList<Matches> matchArr = new ArrayList<Matches>();
+				 Matches matchObj;
 				 
 				 //loop through the list of strings and create the JSONObject/Array
-				 for(int i=0; i<35; i++)
+				 for(int i=0; i<matches.size(); i++)
 				 {
-					 //create the main object
-					 matchAll.add(matches.get(i));
-					 matchAll.add(competition.get(i));
-					 matchAll.add(date.get(i));
-				 }
-
-				 System.out.println("JSON:" + matchAll.toString());
+					 //System.out.println("Comp Size: " + competition.size() + "Match SIze: " + matches.size() + "Date Size: " + date.size());
+					 //create an object for each match
+					 matchObj = new Matches(matches.get(i));
+					 //create a list of matches
+					 matchArr.add(matchObj);
+				 }	 
 				 
+				 return matchArr;
 			}
 			catch(Exception e)
 			{
 			    System.out.println("Got here" + e);
 			}
-		}	
+		}
+		return null;	
     }
 }
