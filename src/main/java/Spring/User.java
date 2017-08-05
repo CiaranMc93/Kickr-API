@@ -35,4 +35,14 @@ public class User
     {
         this.username = name;
     }
+    
+    public Boolean login()
+    {
+    	return true;
+    }
+    
+    public Boolean signUp()
+    {
+    	return true;
+    }
 }
