@@ -169,6 +169,12 @@ public class FixtureList {
 					 {
 						 match = new JSONObject();
 						 
+						 if(fixtures.child(1).html().toString().equals("-") &&  fixtures.child(3).html().toString().equals("-"))
+						 {
+							 //match has been conceded - continue to next iteration
+							 continue;
+						 }
+						 
 						 match.put("Home", fixtures.child(0).html().toString());
 						 match.put("HomeScore", fixtures.child(1).html().toString());
 						 match.put("Away", fixtures.child(4).html().toString());
