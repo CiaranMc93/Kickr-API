@@ -12,17 +12,34 @@ public class Matches
 	private String venue = "";
 	private String competition = "";
 	private String date = "";
+	private String homeTeamScore = "";
+	private String awayTeamScore = "";
+	private String winner = "";
+	private int id = 0;
 	
 	public Matches(JSONObject obj)
 	{
 		try 
 		{
-			this.setTime((String) obj.get("Time"));
+			//create a hash of the following string
+			this.setId(((String) obj.get("Home") + "-" + (String) obj.get("Away") + "-" + (String) obj.get("Competition") + "-" + (String) obj.get("Date")).hashCode());
+			
 			this.setHomeTeam((String) obj.get("Home"));
 			this.setAwayTeam((String) obj.get("Away"));
-			this.setVenue((String) obj.get("Venue"));
 			this.setCompetition((String) obj.get("Competition"));
 			this.setDate((String) obj.get("Date"));
+			
+			if(obj.has("HomeScore"))
+			{
+				this.setHomeTeamScore((String)obj.get("HomeScore"));
+				this.setAwayTeamScore((String)obj.get("AwayScore"));
+				this.setWinner((String)obj.get("Winner"));
+			}
+			else
+			{
+				this.setTime((String) obj.get("Time"));
+				this.setVenue((String) obj.get("Venue"));
+			}
 		} 
 		catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -76,6 +93,39 @@ public class Matches
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public String getWinner() {
+		return winner;
+	}
+
+	public void setWinner(String winner) {
+		this.winner = winner;
+	}
+
+	public String getAwayTeamScore() {
+		return awayTeamScore;
+	}
+
+	public void setAwayTeamScore(String awayTeamScore) {
+		this.awayTeamScore = awayTeamScore;
+	}
+
+	public String getHomeTeamScore() {
+		return homeTeamScore;
+	}
+
+	public void setHomeTeamScore(String homeTeamScore) {
+		this.homeTeamScore = homeTeamScore;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) 
+	{
+		this.id = id;
 	}
 
 }
