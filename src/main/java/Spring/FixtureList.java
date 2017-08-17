@@ -1,24 +1,20 @@
 package Spring;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 public class FixtureList {
 
+	@CrossOrigin
 	//get the fixtures for the county specified
     @RequestMapping(value = "/fixtures/{county}")
     public ArrayList<Matches> fixtures(@PathVariable("county") String county) 
@@ -46,6 +42,7 @@ public class FixtureList {
 		return null;	
     }
     
+	@CrossOrigin
     //get the results for the county specified
     @RequestMapping(value = "/results/{county}")
     public ArrayList<Matches> results(@PathVariable("county") String county) 
