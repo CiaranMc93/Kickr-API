@@ -34,6 +34,13 @@ public class Matches
 				this.setHomeTeamScore((String)obj.get("HomeScore"));
 				this.setAwayTeamScore((String)obj.get("AwayScore"));
 				this.setWinner((String)obj.get("Winner"));
+				
+				//check if time is in the object
+				if(obj.has("Time") && obj.has("Venue"))
+				{
+					this.setTime((String) obj.get("Time"));
+					this.setVenue((String) obj.get("Venue"));
+				}
 			}
 			else
 			{
