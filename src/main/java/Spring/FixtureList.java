@@ -1,24 +1,23 @@
 package Spring;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 public class FixtureList {
 
+	@CrossOrigin
 	//get the fixtures for the county specified
     @RequestMapping(value = "/fixtures/{county}")
     public ArrayList<Matches> fixtures(@PathVariable("county") String county) 
@@ -35,7 +34,23 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return matchReturn(doc,"fixtures");
+				 return laoisMatches(doc,"fixtures");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("carlow"))
+		{
+			URL = "http://www.carlowgaa.ie/wp-admin/admin-ajax.php?action=fixtures&countyBoardID=3&fixturesOnly=Y&daysAfter=7";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return carlowMatches(doc,"fixtures");
 			}
 			catch(Exception e)
 			{
@@ -46,6 +61,7 @@ public class FixtureList {
 		return null;	
     }
     
+	@CrossOrigin
     //get the results for the county specified
     @RequestMapping(value = "/results/{county}")
     public ArrayList<Matches> results(@PathVariable("county") String county) 
@@ -62,7 +78,23 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return matchReturn(doc,"results");
+				 return laoisMatches(doc,"results");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("carlow"))
+		{
+			URL = "http://www.carlowgaa.ie/wp-admin/admin-ajax.php?action=results&countyBoardID=3&resultsOnly=Y&reverseDateOrder=Y&daysPrevious=7";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return carlowMatches(doc,"results");
 			}
 			catch(Exception e)
 			{
@@ -72,9 +104,51 @@ public class FixtureList {
 		
 		return null;	
     }
+	
+	//return an array filled with matches that have been populated
+    private ArrayList<Matches> carlowMatches(Document doc, String option)
+    {
+    	ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
+    	
+    	try 
+		{	 
+    		 Elements carlowMatches = null;
+    		
+    		 carlowMatches = doc.getElementsByClass("fixture single");
+			 
+			 //get the array of matches
+			 matches = carlowMatchJSONObject(carlowMatches,option);
+			 
+			 if(null == matches)
+			 {
+				 return null;
+			 }
+
+			 //array of matches objects
+			 ArrayList<Matches> matchArr = new ArrayList<Matches>();
+			 Matches matchObj;
+			 
+			 //loop through the list of strings and create the JSONObject/Array
+			 for(int i=0; i<matches.size(); i++)
+			 {
+				 //create an object for each match
+				 matchObj = new Matches(matches.get(i));
+				 //create a list of matches
+				 matchArr.add(matchObj);
+			 }	 
+			 
+			 return matchArr;
+		}
+		catch(Exception e)
+		{
+		    System.out.println("Got here carlow" + e);
+		}
+    	
+		return null;	
+    }
     
     //return an array filled with matches that have been populated
-    private ArrayList<Matches> matchReturn(Document doc, String option)
+    private ArrayList<Matches> laoisMatches(Document doc, String option)
     {
     	ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
     	
@@ -95,7 +169,7 @@ public class FixtureList {
 			 Elements rows = tableBody.select("tr");
 			 
 			 //get the array of matches
-			 matches = createJSONMatchObj(rows,option);
+			 matches = laoisMatchJSONObj(rows,option);
 			 
 			 if(null == matches)
 			 {
@@ -125,7 +199,149 @@ public class FixtureList {
 		return null;	
     }
     
-    private ArrayList<JSONObject> createJSONMatchObj(Elements rows,String option)
+    private ArrayList<JSONObject> carlowMatchJSONObject(Elements rows,String option)
+    {
+    	 //define our lists
+		 ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
+    	 JSONObject match = null;
+    	    	
+    	 //we need temp variables for date and competition
+		 String competition = "";
+		 String date = "";
+		 String time = "";
+		 String venue = "";
+		 String matchDetails = "";
+		 String homeTeam = "";
+		 String awayTeam = "";
+		 String homeScore = "";
+		 String awayScore = "";
+		 
+		 try{
+
+	    	 //for each element in table rows
+			 for(Element fixtures : rows)
+			 {
+				 competition = fixtures.child(0).text();
+				 
+				 //split out the venue field of this div
+				 matchDetails = fixtures.child(1).text();
+				 List<String> matchTeamInfo = Arrays.asList(matchDetails.split(" vs "));
+				 
+				 homeTeam = matchTeamInfo.get(0);
+				 awayTeam = matchTeamInfo.get(1);
+				 
+				 if(option.equals("results"))
+				 {
+					 //get the scores
+					 //split out the venue field of this div
+					 matchDetails = fixtures.child(2).text();
+					 List<String> matchResult = Arrays.asList(matchDetails.split(" - "));
+					 
+					 homeScore = matchResult.get(0);
+					 awayScore = matchResult.get(1);
+					 
+					 //split out the venue field of this div
+					 matchDetails = fixtures.child(4).text();
+					 List<String> matchDetailsList = Arrays.asList(matchDetails.split(" / "));
+					 
+					 //make sure there are no issues.
+					 if(matchDetailsList.size() < 3)
+					 {
+						 date = matchDetailsList.get(0);
+						 time = matchDetailsList.get(1);
+						 venue = "Not announced";
+					 }
+					 else
+					 {
+						 date = matchDetailsList.get(0);
+						 time = matchDetailsList.get(1);
+						 venue = matchDetailsList.get(2);
+					 }
+				 }
+				 else
+				 {
+					//split out the venue field of this div
+					 matchDetails = fixtures.child(3).text();
+					 List<String> matchDetailsList = Arrays.asList(matchDetails.split(" / "));
+					 
+					 //make sure there are no issues.
+					 if(matchDetailsList.size() < 3)
+					 {
+						 date = matchDetailsList.get(0);
+						 time = matchDetailsList.get(1);
+						 venue = "TBC";
+					 }
+					 else
+					 {
+						 date = matchDetailsList.get(0);
+						 time = matchDetailsList.get(1);
+						 venue = matchDetailsList.get(2);
+					 }
+				 }
+
+				
+				 
+				 if(option.equals("fixtures"))
+				 {
+					 match = new JSONObject();
+					 
+					 match.put("Time", time);
+					 match.put("Home", homeTeam);
+					 match.put("Away", awayTeam);
+					 match.put("Venue", venue);
+					 match.put("Date", date);
+					 match.put("Competition", competition);
+					 
+					 //add to list
+					 matches.add(match);
+				 }
+				 else if(option.equals("results"))
+				 {
+					 match = new JSONObject();
+					 
+					 match.put("Time", time);
+					 match.put("Home", homeTeam);
+					 match.put("HomeScore", homeScore);
+					 match.put("Away", awayTeam);
+					 match.put("AwayScore", awayScore);
+					 match.put("Venue", venue);
+					 match.put("Date", date);
+					 match.put("Competition", competition);
+					 
+					 //select the winning team
+					 if(winningTeam(homeScore,awayScore, " : ").equals("Home"))
+					 {
+						 match.put("Winner", homeTeam);
+					 }
+					 else if(winningTeam(homeScore,awayScore, " : ").equals("Away"))
+					 {
+						 match.put("Winner", awayTeam);
+					 }
+					 else if(winningTeam(homeScore,awayScore, " : ").equals("Draw"))
+					 {
+						 match.put("Winner", "Draw");
+					 }
+					 else
+					 {
+						 match.put("Winner", "N/A");
+					 }
+					 
+					 //add to list
+					 matches.add(match);
+				 }
+			 }
+			 
+			 return matches;
+		 }
+		 catch(Exception e)
+		 {
+			 System.out.println("Got here carlow obj" + e);
+		 }
+		 
+		return matches;
+    }
+    
+    private ArrayList<JSONObject> laoisMatchJSONObj(Elements rows,String option)
     {
     	 //define our lists
 		 ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
@@ -181,15 +397,15 @@ public class FixtureList {
 						 match.put("AwayScore", fixtures.child(3).html().toString());
 						 
 						 //select the winning team
-						 if(winningTeam(fixtures.child(1).html().toString(),fixtures.child(3).html().toString()).equals("Home"))
+						 if(winningTeam(fixtures.child(1).html().toString(),fixtures.child(3).html().toString(), "-").equals("Home"))
 						 {
 							 match.put("Winner", fixtures.child(0).html().toString());
 						 }
-						 else if(winningTeam(fixtures.child(1).html().toString(),fixtures.child(3).html().toString()).equals("Away"))
+						 else if(winningTeam(fixtures.child(1).html().toString(),fixtures.child(3).html().toString(), "-").equals("Away"))
 						 {
 							 match.put("Winner", fixtures.child(4).html().toString());
 						 }
-						 else if(winningTeam(fixtures.child(1).html().toString(),fixtures.child(3).html().toString()).equals("Draw"))
+						 else if(winningTeam(fixtures.child(1).html().toString(),fixtures.child(3).html().toString(), "-").equals("Draw"))
 						 {
 							 match.put("Winner", "Draw");
 						 }
@@ -217,10 +433,10 @@ public class FixtureList {
     	return null;
     }
 
-	private String winningTeam(String homeScore, String awayScore)
+	private String winningTeam(String homeScore, String awayScore,String splitterChar)
 	{
 		//calculate the home score
-		String[] homeParts = homeScore.split("-");
+		String[] homeParts = homeScore.split(splitterChar);
 		
 		int homeGoals = Integer.parseInt(homeParts[0]);
 		int homePoints = Integer.parseInt(homeParts[1]);
@@ -228,7 +444,7 @@ public class FixtureList {
 		int homeTotal = (homeGoals * 3) + homePoints;
 		
 		//calculate the away score
-		String[] awayParts = awayScore.split("-");
+		String[] awayParts = awayScore.split(splitterChar);
 		
 		int awayGoals = Integer.parseInt(awayParts[0]);
 		int awayPoints = Integer.parseInt(awayParts[1]);
