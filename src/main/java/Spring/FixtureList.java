@@ -34,7 +34,55 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return laoisMatches(doc,"fixtures");
+				 return getMatches(doc,"fixtures");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("kerry"))
+		{
+			URL = "http://www.kerrygaa.ie/upcomingFixtures";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return getMatches(doc,"fixtures");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("waterford"))
+		{
+			URL = "http://www.waterfordgaa.ie/upcomingFixtures";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return getMatches(doc,"fixtures");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("cork"))
+		{
+			URL = "http://www.gaacork.ie/upcomingFixtures";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return getMatches(doc,"fixtures");
 			}
 			catch(Exception e)
 			{
@@ -78,7 +126,55 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return laoisMatches(doc,"results");
+				 return getMatches(doc,"results");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("kerry"))
+		{
+			URL = "http://www.kerrygaa.ie/latestResults";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return getMatches(doc,"results");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("waterford"))
+		{
+			URL = "http://www.waterfordgaa.ie/latestResults";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return getMatches(doc,"results");
+			}
+			catch(Exception e)
+			{
+			    System.out.println("Got here" + e);
+			}
+		}
+		else if(county.toLowerCase().equals("cork"))
+		{
+			URL = "http://www.gaacork.ie/latestResults";
+			
+			try 
+			{
+				 //jsoup gets the html page as a document
+				 Document doc = Jsoup.connect(URL).get();
+				 
+				 return getMatches(doc,"results");
 			}
 			catch(Exception e)
 			{
@@ -148,7 +244,7 @@ public class FixtureList {
     }
     
     //return an array filled with matches that have been populated
-    private ArrayList<Matches> laoisMatches(Document doc, String option)
+    private ArrayList<Matches> getMatches(Document doc, String option)
     {
     	ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
     	
@@ -169,7 +265,7 @@ public class FixtureList {
 			 Elements rows = tableBody.select("tr");
 			 
 			 //get the array of matches
-			 matches = laoisMatchJSONObj(rows,option);
+			 matches = matchJSONObj(rows,option);
 			 
 			 if(null == matches)
 			 {
@@ -279,8 +375,6 @@ public class FixtureList {
 					 }
 				 }
 
-				
-				 
 				 if(option.equals("fixtures"))
 				 {
 					 match = new JSONObject();
@@ -341,7 +435,7 @@ public class FixtureList {
 		return matches;
     }
     
-    private ArrayList<JSONObject> laoisMatchJSONObj(Elements rows,String option)
+    private ArrayList<JSONObject> matchJSONObj(Elements rows,String option)
     {
     	 //define our lists
 		 ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
