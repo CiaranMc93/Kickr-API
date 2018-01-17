@@ -34,11 +34,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"fixtures");
+				 return getMatches(doc,"fixtures",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("kerry"))
@@ -50,11 +50,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"fixtures");
+				 return getMatches(doc,"fixtures",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("waterford"))
@@ -66,11 +66,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"fixtures");
+				 return getMatches(doc,"fixtures",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("cork"))
@@ -82,11 +82,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"fixtures");
+				 return getMatches(doc,"fixtures",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("carlow"))
@@ -98,11 +98,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return carlowMatches(doc,"fixtures");
+				 return carlowMatches(doc,"fixtures",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		
@@ -126,11 +126,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"results");
+				 return getMatches(doc,"results",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("kerry"))
@@ -142,11 +142,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"results");
+				 return getMatches(doc,"results",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("waterford"))
@@ -158,11 +158,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"results");
+				 return getMatches(doc,"results",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("cork"))
@@ -174,11 +174,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return getMatches(doc,"results");
+				 return getMatches(doc,"results",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		else if(county.toLowerCase().equals("carlow"))
@@ -190,11 +190,11 @@ public class FixtureList {
 				 //jsoup gets the html page as a document
 				 Document doc = Jsoup.connect(URL).get();
 				 
-				 return carlowMatches(doc,"results");
+				 return carlowMatches(doc,"results",county);
 			}
 			catch(Exception e)
 			{
-			    System.out.println("Got here" + e);
+				e.printStackTrace();
 			}
 		}
 		
@@ -202,7 +202,7 @@ public class FixtureList {
     }
 	
 	//return an array filled with matches that have been populated
-    private ArrayList<Matches> carlowMatches(Document doc, String option)
+    private ArrayList<Matches> carlowMatches(Document doc, String option,String county)
     {
     	ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
     	
@@ -213,7 +213,7 @@ public class FixtureList {
     		 carlowMatches = doc.getElementsByClass("fixture single");
 			 
 			 //get the array of matches
-			 matches = carlowMatchJSONObject(carlowMatches,option);
+			 matches = carlowMatchJSONObject(carlowMatches,option,county);
 			 
 			 if(null == matches)
 			 {
@@ -237,14 +237,14 @@ public class FixtureList {
 		}
 		catch(Exception e)
 		{
-		    System.out.println("Got here carlow" + e);
+			e.printStackTrace();
 		}
     	
 		return null;	
     }
     
     //return an array filled with matches that have been populated
-    private ArrayList<Matches> getMatches(Document doc, String option)
+    private ArrayList<Matches> getMatches(Document doc, String option, String county)
     {
     	ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
     	
@@ -265,7 +265,7 @@ public class FixtureList {
 			 Elements rows = tableBody.select("tr");
 			 
 			 //get the array of matches
-			 matches = matchJSONObj(rows,option);
+			 matches = matchJSONObj(rows,option,county);
 			 
 			 if(null == matches)
 			 {
@@ -289,13 +289,13 @@ public class FixtureList {
 		}
 		catch(Exception e)
 		{
-		    System.out.println("Got here" + e);
+			e.printStackTrace();
 		}
     	
 		return null;	
     }
     
-    private ArrayList<JSONObject> carlowMatchJSONObject(Elements rows,String option)
+    private ArrayList<JSONObject> carlowMatchJSONObject(Elements rows,String option,String county)
     {
     	 //define our lists
 		 ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
@@ -385,6 +385,7 @@ public class FixtureList {
 					 match.put("Venue", venue);
 					 match.put("Date", date);
 					 match.put("Competition", competition);
+					 match.put("County", county);
 					 
 					 //add to list
 					 matches.add(match);
@@ -401,6 +402,7 @@ public class FixtureList {
 					 match.put("Venue", venue);
 					 match.put("Date", date);
 					 match.put("Competition", competition);
+					 match.put("County", county);
 					 
 					 //select the winning team
 					 if(winningTeam(homeScore,awayScore, " : ").equals("Home"))
@@ -435,7 +437,7 @@ public class FixtureList {
 		return matches;
     }
     
-    private ArrayList<JSONObject> matchJSONObj(Elements rows,String option)
+    private ArrayList<JSONObject> matchJSONObj(Elements rows,String option,String county)
     {
     	 //define our lists
 		 ArrayList<JSONObject> matches = new ArrayList<JSONObject>();
@@ -471,6 +473,7 @@ public class FixtureList {
 						 match.put("Venue", fixtures.child(4).html().toString());
 						 match.put("Date", tempDate);
 						 match.put("Competition", tempComp);
+						 match.put("County", county);
 						 
 						 //add to list
 						 matches.add(match);
@@ -510,6 +513,7 @@ public class FixtureList {
 						 
 						 match.put("Date", tempDate);
 						 match.put("Competition", tempComp);
+						 match.put("County", county);
 						 
 						 //add to list
 						 matches.add(match);
