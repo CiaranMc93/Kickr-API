@@ -15,6 +15,7 @@ public class Matches
 	private String homeTeamScore = "";
 	private String awayTeamScore = "";
 	private String winner = "";
+	private String county = "";
 	private int id = 0;
 	
 	public Matches(JSONObject obj)
@@ -22,12 +23,13 @@ public class Matches
 		try 
 		{
 			//create a hash of the following string
-			this.setId(((String) obj.get("Home") + "-" + (String) obj.get("Away") + "-" + (String) obj.get("Competition") + "-" + (String) obj.get("Date")).hashCode());
+			this.setId(((String) obj.get("Home") + "-" + (String) obj.get("Away") + "-" + (String) obj.get("Date")).hashCode());
 			
 			this.setHomeTeam((String) obj.get("Home"));
 			this.setAwayTeam((String) obj.get("Away"));
 			this.setCompetition((String) obj.get("Competition"));
 			this.setDate((String) obj.get("Date"));
+			this.setCounty((String) obj.get("County"));
 			
 			if(obj.has("HomeScore"))
 			{
@@ -133,6 +135,15 @@ public class Matches
 	public void setId(int id) 
 	{
 		this.id = id;
+	}
+	
+	public String getCounty() {
+		return county;
+	}
+
+	public void setCounty(String county) 
+	{
+		this.county = county;
 	}
 
 }
