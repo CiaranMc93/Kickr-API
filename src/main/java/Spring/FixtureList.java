@@ -225,7 +225,7 @@ public class FixtureList {
     					 match.put("Away", awayTeam);
     					 match.put("AwayScore", awayScore);
     					 match.put("Venue", venue);
-    					 match.put("Date", date);
+    					 match.put("Date", parseDate(date));
     					 match.put("Competition", competition);
     					 match.put("Winner", "N/A");
     					 match.put("County", county);
@@ -243,7 +243,7 @@ public class FixtureList {
     					 match.put("Away", awayTeam);
     					 match.put("AwayScore", awayScore);
     					 match.put("Venue", venue);
-    					 match.put("Date", date);
+    					 match.put("Date", parseDate(date));
     					 match.put("Competition", competition);
     					 match.put("County", county);
     					 
@@ -739,5 +739,35 @@ public class FixtureList {
 		}
 		
 		return parsedTime;
+	}
+	
+	private String parseDate(String dateToParse)
+	{
+		String parseDate = "";
+		
+		try
+		{
+			SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MM-yyy");
+	        SimpleDateFormat parseFormat = new SimpleDateFormat("EEE dd MMM. yyyy");
+	        Date date = parseFormat.parse(dateToParse);
+	        parseDate = displayFormat.format(date);
+		}
+		catch(Exception e)
+		{
+			//parse the alternate format of the dates.
+			try
+			{
+				SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MM-yyy");
+		        SimpleDateFormat parseFormat = new SimpleDateFormat("EEE dd MMMMM yyyy");
+		        Date date = parseFormat.parse(dateToParse);
+		        parseDate = displayFormat.format(date);
+			}
+			catch(Exception j)
+			{
+				j.printStackTrace();
+			}
+		}
+		
+		return parseDate;
 	}
 }
