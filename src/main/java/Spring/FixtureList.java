@@ -606,7 +606,7 @@ public class FixtureList {
 				 //competition denotes a new section
 				 if(fixtures.toString().contains("competition"))
 				 {
-					 tempComp = fixtures.child(0).html().toString();
+					 tempComp = fixtures.child(0).html().toString().replaceAll("/", "-");
 				 }
 				 else if(fixtures.toString().contains("date"))
 				 {
