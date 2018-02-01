@@ -606,11 +606,11 @@ public class FixtureList {
 				 //competition denotes a new section
 				 if(fixtures.toString().contains("competition"))
 				 {
-					 tempComp = fixtures.child(0).html().toString().replaceAll("/", "-");
+					 tempComp = fixtures.child(0).html().toString();
 				 }
 				 else if(fixtures.toString().contains("date"))
 				 {
-					 tempDate = fixtures.child(0).html().toString();
+					 tempDate = fixtures.child(0).html().toString().replaceAll("/", "-");
 				 }
 				 else if(fixtures.toString().contains("item odd") || fixtures.toString().contains("item even"))
 				 {
