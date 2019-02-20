@@ -1,5 +1,7 @@
-Spring\Error.class
 Spring\Application.class
+Spring\LeagueTablePosition.class
+Spring\Error.class
 Spring\FixtureList.class
+Spring\LeagueInfo.class
 Spring\Matches.class
 Spring\User.class
