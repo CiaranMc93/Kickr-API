@@ -86,6 +86,10 @@ public class Matches extends Object
             {
                 this.setVenue((String) obj.get("Venue"));
             }
+            else
+            {
+                this.setVenue((String) obj.get("Home"));
+            }
         }
         else
         {
