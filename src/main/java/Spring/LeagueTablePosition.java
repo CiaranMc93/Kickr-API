@@ -3,7 +3,7 @@ package Spring;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LeagueTablePosition extends Object
+public class LeagueTablePosition
 {
     private String teamName = "";
     private String played;
