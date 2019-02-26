@@ -377,4 +377,17 @@ public class LeagueInfo
             {
                 SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MM-yyy");
                 SimpleDateFormat parseFormat = new SimpleDateFormat("EEE dd MMMMM yyyy");
-                Date date = parseFormat.parse(dateToPar
+                Date date = parseFormat.parse(dateToParse);
+                parseDate = displayFormat.format(date);
+            }
+            catch (Exception j)
+            {
+                j.printStackTrace();
+            }
+        }
+
+        return parseDate;
+    }
+}
+
+      
