@@ -28,7 +28,11 @@ public class LeagueInfo
                     "136897/a_c_h_l_division1_a",
                     "136899/a_c_h_l_division2",
                     "136900/a_c_h_l_division3",
-                    "136901/a_c_h_l_division4"
+                    "136901/a_c_h_l_division4",
+                    "136915/a_c_f_l_division5_group_a",
+                    "136914/a_c_f_l_division5_group_b",
+                    "136902/a_c_h_l_division5_group_a",
+                    "136903/a_c_h_l_division5_group_b"
             );
 
     @CrossOrigin
@@ -81,6 +85,22 @@ public class LeagueInfo
             case "ACHL4":
                 ovrData.put("Fixtures", getLeagueInfoHtml(baseURL + leagueListUrls.get(9)));
                 ovrData.put("LeagueTable", getLeagueTableHtml(baseURL + leagueListUrls.get(9)));
+                break;
+            case "ACFL5A":
+                ovrData.put("Fixtures", getLeagueInfoHtml(baseURL + leagueListUrls.get(10)));
+                ovrData.put("LeagueTable", getLeagueTableHtml(baseURL + leagueListUrls.get(10)));
+                break;
+            case "ACFL5B":
+                ovrData.put("Fixtures", getLeagueInfoHtml(baseURL + leagueListUrls.get(11)));
+                ovrData.put("LeagueTable", getLeagueTableHtml(baseURL + leagueListUrls.get(11)));
+                break;
+            case "ACHL5A":
+                ovrData.put("Fixtures", getLeagueInfoHtml(baseURL + leagueListUrls.get(12)));
+                ovrData.put("LeagueTable", getLeagueTableHtml(baseURL + leagueListUrls.get(12)));
+                break;
+            case "ACHL5B":
+                ovrData.put("Fixtures", getLeagueInfoHtml(baseURL + leagueListUrls.get(13)));
+                ovrData.put("LeagueTable", getLeagueTableHtml(baseURL + leagueListUrls.get(13)));
                 break;
             default:
                 System.out.println("Defaulted");
@@ -357,17 +377,4 @@ public class LeagueInfo
             {
                 SimpleDateFormat displayFormat = new SimpleDateFormat("dd-MM-yyy");
                 SimpleDateFormat parseFormat = new SimpleDateFormat("EEE dd MMMMM yyyy");
-                Date date = parseFormat.parse(dateToParse);
-                parseDate = displayFormat.format(date);
-            }
-            catch (Exception j)
-            {
-                j.printStackTrace();
-            }
-        }
-
-        return parseDate;
-    }
-}
-
-      
+                Date date = parseFormat.parse(dateToPar
