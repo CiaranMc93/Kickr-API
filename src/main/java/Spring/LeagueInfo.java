@@ -128,6 +128,9 @@ public class LeagueInfo
         return null;
     }
 
+    private Element comp = null;
+    private String competitionName = "";
+
     private ArrayList<Matches> getLeagueTableInfo(Document doc) throws JSONException
     {
         ArrayList<JSONObject> leagueTableInfo = new ArrayList<>();
@@ -135,6 +138,11 @@ public class LeagueInfo
         Element leagueInfo = null;
 
         leagueInfo = doc.getElementsByClass("frData leagueTable").get(0);
+        comp = doc.getElementsByClass("competition").get(0);
+
+        Elements competitionTag = comp.getElementsByTag("td");
+
+        competitionName = competitionTag.get(0).html();
 
         //get all rows from the table
         Elements rows = leagueInfo.select("tr");
@@ -177,6 +185,7 @@ public class LeagueInfo
                 match.put("pointsAgainst", row.child(6).html());
                 match.put("pointsDiff", row.child(7).html());
                 match.put("pointsTotal", row.child(8).html());
+                match.put("competition", competitionName);
 
                 matches.add(match);
             }

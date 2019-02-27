@@ -41,6 +41,7 @@ public class Matches extends Object
         this.setPointsDiff(obj.get("pointsDiff").toString());
         this.setPointsTotal(obj.get("pointsTotal").toString());
         this.setLeaguePos(leaguePos);
+        this.setCompetition(obj.get("competition").toString());
     }
 
     public Matches(JSONObject obj) throws JSONException
